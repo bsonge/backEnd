@@ -9,4 +9,4 @@
 { type: 'text', label: 'Structure Inchi', name:'Structure_InChI' },
 { type: 'text', label: 'Structure Inchikey', name:'Structure_InChIKey' },
 { type: 'text', label: 'Structure Formula', name:'Structure_Formula' },
-{ type: 'double', label: 'Structure Molwt', name:'Structure_MolWt' },
+{ type: 'number', label: 'Structure Molwt', name:'Structure_MolWt' },

@@ -65,7 +65,7 @@ fields.each_with_index do |field, index|
     next if index == 0 && headers[index] == 'id'
   end
   if output_type == 'JSON'
-    field = 'number' if field == 'integer' || field == 'float'
+    field = 'number' if field == 'integer' || field == 'double'
     field = 'text' if field == 'string'
     field = 'checkbox' if field == 'bool'
   end
