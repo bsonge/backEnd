@@ -75,4 +75,65 @@ router.route('/basic')
     res.status(200).json(new jsonResponse(null, result));
   });
 
+router.route('/advanced/:model')
+  .get(async (req, res) => {
+    const modelName = (req.params.model) ? req.params.model : null;
+    if (!modelName) {
+      res.status(400).josn(new jsonResponse(
+        'Model must be specified in the advanced search'
+      ));
+      return;
+    }
+
+    let limit;
+    let offset;
+    try {
+      if (req.query && req.query.limit && !isNaN(parseInt(req.query.limit))) {
+        limit = parseInt(req.query.limit);
+      } else {
+        limit = DEFAULT_RETURN_LIMIT;
+      }
+
+      if (req.query && req.query.offset && !isNaN(parseInt(req.query.offset))) {
+        offset = parseInt(req.query.offset);
+      } else {
+        offset = 0;
+      }
+    } catch (err) {
+      res.status(400).json(new jsonResponse(err));
+    }
+
+    const query = (req.query.q) ? req.query.q : null;
+    if (!query) {
+      res.status(400).json(new jsonResponse(
+        'The q string must be set with the advanced query options'
+      ));
+      return;
+    }
+
+    let params;
+    try {
+      params = JSON.parse(query);
+    } catch (err) {
+      res.status(500).json(new jsonResponse(
+        `Unable to convert q from JSON: ${err}`
+      ));
+      return;
+    }
+
+    const helper = new Helper(
+      modelName,
+      [],
+      limit
+    );
+
+    let results;
+    try {
+      results = await helper.advancedSearch(params, {limit, offset});
+    } catch (err) {
+      res.status(500).josn(new jsonResponse(err));
+      return;
+    }
+    res.status(200).json(new jsonResponse(null, results));
+  });
 module.exports = router;
